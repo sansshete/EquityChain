@@ -1,0 +1,50 @@
+// ABI for ProjectFactory contract
+export const PROJECT_FACTORY_ABI = [
+  "function createProject(string memory _name, string memory _symbol, string memory _description, string memory _category, uint256 _fundingGoal, uint256 _equityPercentage, uint256 _minInvestment, uint256 _maxInvestment, uint256 _fundingDuration) external returns (address)",
+  "function approveProject(address _tokenAddress) external",
+  "function getApprovedProjects() external view returns (address[] memory)",
+  "function getAllProjects() external view returns (address[] memory)",
+  "function getCreatorProjects(address _creator) external view returns (address[] memory)",
+  "function projects(address) external view returns (address tokenAddress, address creator, string memory name, string memory category, uint256 fundingGoal, uint256 equityPercentage, uint256 createdAt, bool isActive, bool isApproved)",
+  "function platformFeePercentage() external view returns (uint256)",
+  "function calculatePlatformFee(uint256 _amount) external view returns (uint256)",
+  "event ProjectCreated(address indexed tokenAddress, address indexed creator, string name, uint256 fundingGoal, uint256 equityPercentage)",
+  "event ProjectApproved(address indexed tokenAddress)"
+];
+
+// ABI for EquityToken contract
+export const EQUITY_TOKEN_ABI = [
+  "function invest() external payable",
+  "function withdrawFunds() external",
+  "function refund() external",
+  "function addMilestone(string memory _description, uint256 _targetAmount) external",
+  "function completeMilestone(uint256 _milestoneIndex) external",
+  "function getFundingProgress() external view returns (uint256 raised, uint256 goal, uint256 percentage)",
+  "function getTimeRemaining() external view returns (uint256)",
+  "function getInvestorCount() external view returns (uint256)",
+  "function getMilestoneCount() external view returns (uint256)",
+  "function fundingGoal() external view returns (uint256)",
+  "function totalRaised() external view returns (uint256)",
+  "function equityPercentage() external view returns (uint256)",
+  "function minInvestment() external view returns (uint256)",
+  "function maxInvestment() external view returns (uint256)",
+  "function fundingDeadline() external view returns (uint256)",
+  "function tokenPrice() external view returns (uint256)",
+  "function fundingActive() external view returns (bool)",
+  "function fundingSuccessful() external view returns (bool)",
+  "function projectCreator() external view returns (address)",
+  "function projectDescription() external view returns (string memory)",
+  "function projectCategory() external view returns (string memory)",
+  "function investors(address) external view returns (uint256 investment, uint256 tokens, uint256 timestamp, bool isActive)",
+  "function milestones(uint256) external view returns (string memory description, uint256 targetAmount, bool isCompleted, uint256 completedAt)",
+  "function balanceOf(address account) external view returns (uint256)",
+  "function totalSupply() external view returns (uint256)",
+  "function name() external view returns (string memory)",
+  "function symbol() external view returns (string memory)",
+  "function decimals() external view returns (uint8)",
+  "event InvestmentMade(address indexed investor, uint256 amount, uint256 tokens)",
+  "event FundingGoalReached(uint256 totalAmount)",
+  "event MilestoneCompleted(uint256 milestoneIndex, string description)",
+  "event FundsWithdrawn(address indexed creator, uint256 amount)",
+  "event RefundIssued(address indexed investor, uint256 amount)"
+];
