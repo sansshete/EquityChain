@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Users, Clock, TrendingUp, Shield, Calendar, FileText, DollarSign } from 'lucide-react';
+import { ArrowLeft, Users, Clock, TrendingUp, Shield, Calendar, FileText, DollarSign, MessageCircle } from 'lucide-react';
 import { useWeb3 } from '../hooks/useWeb3';
 import { ContractService } from '../services/contractService';
 import { mockProjects } from '../data/mockData';
@@ -258,6 +258,13 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ projectId, onBack,
             >
               {isConnected ? 'Invest Now' : 'Connect Wallet to Invest'}
             </button>
+            
+            <div className="text-center mt-3">
+              <p className="text-xs text-gray-500 flex items-center justify-center">
+                <MessageCircle className="h-3 w-3 mr-1" />
+                Questions about investing? Ask our AI assistant
+              </p>
+            </div>
           </div>
 
           <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">

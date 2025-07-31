@@ -1,5 +1,5 @@
 import React from 'react';
-import { Coins, User, Plus, BarChart3, Wallet } from 'lucide-react';
+import { Coins, User, Plus, BarChart3, Wallet, MessageCircle } from 'lucide-react';
 import { useWeb3 } from '../hooks/useWeb3';
 import type { Page } from '../App';
 
@@ -68,6 +68,11 @@ export const Header: React.FC<HeaderProps> = ({ currentPage, onNavigate }) => {
               <Plus className="h-4 w-4 mr-2" />
               Create Project
             </button>
+            
+            <div className="hidden md:flex items-center text-gray-400 text-sm">
+              <MessageCircle className="h-4 w-4 mr-1" />
+              <span>AI Assistant available</span>
+            </div>
             
             {isConnected ? (
               <div className="flex items-center space-x-2 px-3 py-2 bg-green-50 text-green-700 rounded-lg">

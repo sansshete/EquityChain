@@ -1,5 +1,5 @@
 import React from 'react';
-import { TrendingUp, Shield, Globe, ArrowRight } from 'lucide-react';
+import { TrendingUp, Shield, Globe, ArrowRight, MessageCircle } from 'lucide-react';
 
 interface HeroProps {
   onGetStarted: () => void;
@@ -34,6 +34,11 @@ export const Hero: React.FC<HeroProps> = ({ onGetStarted }) => {
             <button className="inline-flex items-center px-8 py-4 border-2 border-blue-300 text-blue-100 font-semibold rounded-xl hover:bg-blue-800 hover:border-blue-200 transition-all duration-200">
               Explore Investments
             </button>
+            
+            <div className="flex items-center text-blue-200 text-sm mt-4">
+              <MessageCircle className="h-4 w-4 mr-2" />
+              <span>Need help? Click the assistant icon for guidance</span>
+            </div>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">

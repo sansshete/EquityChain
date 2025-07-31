@@ -320,6 +320,13 @@ export const CreateProject: React.FC<CreateProjectProps> = ({ onBack }) => {
               </div>
             )}
             
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <p className="text-blue-800 text-sm flex items-center">
+                <MessageCircle className="h-4 w-4 mr-2" />
+                Need help with project creation? Ask our AI assistant for step-by-step guidance.
+              </p>
+            </div>
+            
             {submitError && (
               <div className="bg-red-50 border border-red-200 rounded-lg p-4">
                 <p className="text-red-800 text-sm">{submitError}</p>

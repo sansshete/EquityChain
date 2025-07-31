@@ -7,12 +7,14 @@ import { ProjectDetail } from './components/ProjectDetail';
 import { InvestorDashboard } from './components/InvestorDashboard';
 import { CreateProject } from './components/CreateProject';
 import { CreatorDashboard } from './components/CreatorDashboard';
+import { AIAssistant } from './components/AIAssistant';
 
 export type Page = 'home' | 'project' | 'investor-dashboard' | 'create-project' | 'creator-dashboard';
 
 function App() {
   const [currentPage, setCurrentPage] = useState<Page>('home');
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
+  const [isAssistantOpen, setIsAssistantOpen] = useState(false);
   const { isConnected } = useWeb3();
 
   const navigateToProject = (projectId: string) => {
@@ -53,6 +55,10 @@ function App() {
         onNavigate={setCurrentPage}
       />
       {renderCurrentPage()}
+      <AIAssistant 
+        isOpen={isAssistantOpen}
+        onToggle={() => setIsAssistantOpen(!isAssistantOpen)}
+      />
     </div>
   );
 }
