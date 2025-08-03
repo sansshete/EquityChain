@@ -1,12 +1,10 @@
 # EquityChain - Blockchain Crowdfunding Equity Distribution Platform
 
-![EquityChain Logo](https://images.pexels.com/photos/8358118/pexels-photo-8358118.jpeg?auto=compress&cs=tinysrgb&w=400)
-
-## 🚀 Overview
+## Overview
 
 EquityChain is a revolutionary blockchain-based crowdfunding platform that democratizes equity investment through smart contracts and tokenized ownership. Built on Ethereum and Polygon networks, it enables startups to raise capital while providing investors with transparent, secure, and liquid equity tokens.
 
-### 🌟 Key Features
+### Key Features
 
 - **Tokenized Equity**: ERC-20 compliant equity tokens representing real ownership stakes
 - **Smart Contract Automation**: Automated fund distribution, milestone tracking, and refund mechanisms
@@ -15,7 +13,7 @@ EquityChain is a revolutionary blockchain-based crowdfunding platform that democ
 - **Multi-Network Support**: Ethereum, Polygon, and testnets for cost-effective transactions
 - **Transparent Governance**: Public blockchain ensures complete transparency and immutability
 
-## 🏗️ Architecture
+## Architecture
 
 ### Blockchain Type: Public Blockchain
 - **Network**: Ethereum Mainnet, Polygon, Sepolia Testnet
@@ -40,7 +38,7 @@ EquityToken.sol (Individual Projects)
 └── Investor management
 ```
 
-## 🛠️ Technology Stack
+##  Technology Stack
 
 ### Frontend
 - **React 18** with TypeScript
@@ -59,7 +57,7 @@ EquityToken.sol (Individual Projects)
 - **ESLint** for code quality
 - **TypeScript** for type safety
 
-## 📋 Prerequisites
+## Prerequisites
 
 Before running this project, ensure you have:
 
@@ -68,7 +66,7 @@ Before running this project, ensure you have:
 - **MetaMask** browser extension
 - **Git** for version control
 
-## 🚀 Quick Start
+## Quick Start
 
 ### 1. Clone the Repository
 ```bash
@@ -115,7 +113,7 @@ npm run dev
 
 Visit `http://localhost:5173` to see the application.
 
-## 📱 Usage Guide
+## Usage Guide
 
 ### For Investors
 
@@ -159,7 +157,7 @@ Visit `http://localhost:5173` to see the application.
    - Provide regular updates
    - Handle dividend distributions (if applicable)
 
-## 🔧 Smart Contract Details
+## Smart Contract Details
 
 ### ProjectFactory Contract
 
@@ -188,7 +186,7 @@ Visit `http://localhost:5173` to see the application.
 - Automated refund mechanisms
 - Milestone-based fund release
 
-## 🔒 Security Measures
+## Security Measures
 
 ### Smart Contract Security
 - **Audited Contracts**: OpenZeppelin standards
@@ -208,7 +206,7 @@ Visit `http://localhost:5173` to see the application.
 - **Transaction Transparency**: All operations on public blockchain
 - **Emergency Procedures**: Refund mechanisms for failed projects
 
-## 🌐 Network Configuration
+## Network Configuration
 
 ### Supported Networks
 
@@ -225,7 +223,7 @@ Visit `http://localhost:5173` to see the application.
 - **Efficient Contracts**: Optimized Solidity code
 - **Gas Estimation**: Real-time fee calculation
 
-## 🤖 AI Assistant Features
+## AI Assistant Features
 
 The integrated AI assistant helps users with:
 
@@ -237,7 +235,7 @@ The integrated AI assistant helps users with:
 - **Platform Navigation**: Finding features and understanding dashboards
 - **Legal Compliance**: KYC requirements and regulatory information
 
-## 📊 Platform Economics
+## Platform Economics
 
 ### Fee Structure
 - **Platform Fee**: 2.5% of successfully raised funds
@@ -249,7 +247,7 @@ The integrated AI assistant helps users with:
 - **Maximum Investment**: No platform limits
 - **Equity Range**: 1-100% (typically 5-20% for crowdfunding)
 
-## 🧪 Testing
+## Testing
 
 ### Run Tests
 ```bash
@@ -269,7 +267,7 @@ Use Sepolia testnet for testing:
 2. Deploy contracts to Sepolia
 3. Test all functionality without real money
 
-## 🚀 Deployment
+## Deployment
 
 ### Frontend Deployment (Netlify)
 ```bash
@@ -297,7 +295,7 @@ VITE_CONTRACT_ADDRESS_POLYGON=0x...
 VITE_INFURA_PROJECT_ID=your_infura_id
 ```
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions! Please follow these steps:
 
@@ -316,85 +314,7 @@ We welcome contributions! Please follow these steps:
    ```
 5. **Open Pull Request**
 
-### Development Guidelines
-- Follow TypeScript best practices
-- Write comprehensive tests
-- Update documentation
-- Follow Solidity style guide
-- Use conventional commit messages
-
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🆘 Support & Documentation
-
-### Getting Help
-- **AI Assistant**: Use the built-in chatbot for instant help
-- **GitHub Issues**: Report bugs and request features
-- **Documentation**: Comprehensive guides in `/docs` folder
-- **Community**: Join our Discord server
-
-### Common Issues
-
-**Wallet Connection Issues:**
-- Ensure MetaMask is installed and unlocked
-- Check network configuration
-- Clear browser cache if needed
-
-**Transaction Failures:**
-- Verify sufficient gas fees
-- Check network congestion
-- Ensure contract addresses are correct
-
-**Investment Issues:**
-- Confirm minimum investment requirements
-- Check project funding status
-- Verify wallet balance
-
-## 🔮 Roadmap
-
-### Phase 1 (Current)
-- ✅ Core smart contracts
-- ✅ Web3 integration
-- ✅ Basic UI/UX
-- ✅ AI assistant
-
-### Phase 2 (Q2 2024)
-- 🔄 Advanced analytics dashboard
-- 🔄 Mobile app development
-- 🔄 Integration with traditional payment methods
-- 🔄 Enhanced KYC/AML compliance
-
-### Phase 3 (Q3 2024)
-- 📋 Secondary market for equity tokens
-- 📋 DAO governance implementation
-- 📋 Cross-chain compatibility
-- 📋 Institutional investor features
-
-### Phase 4 (Q4 2024)
-- 📋 Regulatory compliance tools
-- 📋 Advanced DeFi integrations
-- 📋 Global expansion
-- 📋 Enterprise solutions
-
-## 📞 Contact
-
-- **Website**: [https://equitychain.app](https://neon-nasturtium-072dc3.netlify.app)
-- **Email**: contact@equitychain.app
-- **Twitter**: [@EquityChain](https://twitter.com/equitychain)
-- **Discord**: [Join our community](https://discord.gg/equitychain)
-
-## 🙏 Acknowledgments
-
-- **OpenZeppelin** for security standards
-- **Hardhat** for development framework
-- **MetaMask** for wallet integration
-- **Tailwind CSS** for styling framework
-- **React** team for the frontend framework
-
----
-
-**Built with ❤️ for the decentralized future of fundraising**
-
-*Democratizing equity investment through blockchain technology*
