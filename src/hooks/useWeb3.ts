@@ -53,15 +53,12 @@ export const useWeb3 = () => {
         error: null,
       });
 
-      return account;
-
     } catch (error: any) {
       console.error('Failed to connect wallet:', error);
       updateState({
         isConnecting: false,
         error: error.message || 'Failed to connect wallet',
       });
-      return null;
     }
   }, [updateState]);
 

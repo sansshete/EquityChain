@@ -5,26 +5,16 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev:next": "next dev",
     "build": "vite build",
-    "build:next": "next build && next export",
     "lint": "eslint .",
     "preview": "vite preview",
     "compile-contracts": "npx hardhat compile",
-    "deploy-local": "npx hardhat run scripts/deploy.js --network localhost",
-    "deploy-sepolia": "npx hardhat run scripts/deploy.js --network sepolia",
-    "firebase:deploy": "firebase deploy"
+    "deploy-local": "npx hardhat run scripts/deploy.js --network localhost"
   },
   "dependencies": {
-    "@web3modal/ethereum": "^2.7.1",
-    "@web3modal/react": "^2.7.1",
-    "ethers": "^6.15.0",
-    "firebase": "^12.1.0",
     "lucide-react": "^0.344.0",
-    "next": "^15.5.0",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
-    "web3modal": "^1.9.12"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",

@@ -2,23 +2,23 @@
 export const CONTRACT_ADDRESSES = {
   // Ethereum Mainnet
   1: {
-    crowdfundingFactory: '0x0000000000000000000000000000000000000000', // Deploy and update
+    projectFactory: '0x0000000000000000000000000000000000000000', // Deploy and update
   },
   // Ethereum Sepolia Testnet
   11155111: {
-    crowdfundingFactory: '0x0000000000000000000000000000000000000000', // Deploy and update
+    projectFactory: '0x0000000000000000000000000000000000000000', // Deploy and update
   },
   // Polygon Mainnet
   137: {
-    crowdfundingFactory: '0x0000000000000000000000000000000000000000', // Deploy and update
+    projectFactory: '0x0000000000000000000000000000000000000000', // Deploy and update
   },
   // Polygon Mumbai Testnet
   80001: {
-    crowdfundingFactory: '0x0000000000000000000000000000000000000000', // Deploy and update
+    projectFactory: '0x0000000000000000000000000000000000000000', // Deploy and update
   },
   // Local development
   31337: {
-    crowdfundingFactory: '0x5FbDB2315678afecb367f032d93F642f64180aa3', // Hardhat default
+    projectFactory: '0x5FbDB2315678afecb367f032d93F642f64180aa3', // Hardhat default
   },
 };
 
