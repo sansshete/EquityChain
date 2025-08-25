@@ -1,18 +1,62 @@
 import React from 'react';
-import { Coins, User, Plus, BarChart3, Wallet, MessageCircle } from 'lucide-react';
+import { Coins, User, Plus, BarChart3, Wallet, Shield, Users, Lightbulb } from 'lucide-react';
 import { useWeb3 } from '../hooks/useWeb3';
-import type { Page } from '../App';
+import { User as UserType } from '../lib/firestore';
 
 interface HeaderProps {
-  currentPage: Page;
-  onNavigate: (page: Page) => void;
+  user: UserType | null;
+  onNavigate: (page: string) => void;
+  currentPage: string;
 }
 
-export const Header: React.FC<HeaderProps> = ({ currentPage, onNavigate }) => {
-  const { account, isConnected, isConnecting, connectWallet, disconnectWallet, error } = useWeb3();
+export const Header: React.FC<HeaderProps> = ({ user, onNavigate, currentPage }) => {
+  const { account, isConnected, isConnecting, connectWallet, disconnectWallet } = useWeb3();
 
   const formatAddress = (address: string) => {
     return `${address.slice(0, 6)}...${address.slice(-4)}`;
+  };
+
+  const getRoleIcon = (role: UserType['role']) => {
+    switch (role) {
+      case 'admin': return Shield;
+      case 'creator': return Lightbulb;
+      case 'backer': return Users;
+      default: return User;
+    }
+  };
+
+  const getRoleColor = (role: UserType['role']) => {
+    switch (role) {
+      case 'admin': return 'text-purple-600 bg-purple-100';
+      case 'creator': return 'text-green-600 bg-green-100';
+      case 'backer': return 'text-blue-600 bg-blue-100';
+      default: return 'text-gray-600 bg-gray-100';
+    }
+  };
+
+  const getNavigationItems = () => {
+    if (!user) return [];
+
+    switch (user.role) {
+      case 'admin':
+        return [
+          { id: 'admin-dashboard', label: 'Admin Dashboard', icon: Shield },
+          { id: 'all-projects', label: 'All Projects', icon: BarChart3 },
+        ];
+      case 'creator':
+        return [
+          { id: 'creator-dashboard', label: 'My Projects', icon: Lightbulb },
+          { id: 'create-project', label: 'Create Project', icon: Plus },
+          { id: 'projects', label: 'Browse Projects', icon: BarChart3 },
+        ];
+      case 'backer':
+        return [
+          { id: 'projects', label: 'Browse Projects', icon: BarChart3 },
+          { id: 'portfolio', label: 'My Portfolio', icon: User },
+        ];
+      default:
+        return [];
+    }
   };
 
   return (
@@ -27,52 +71,37 @@ export const Header: React.FC<HeaderProps> = ({ currentPage, onNavigate }) => {
             <span className="ml-2 text-xl font-bold text-gray-900">EquityChain</span>
           </div>
 
-          <nav className="hidden md:flex space-x-8">
-            <button
-              onClick={() => onNavigate('home')}
-              className={`text-sm font-medium transition-colors ${
-                currentPage === 'home' 
-                  ? 'text-blue-600 border-b-2 border-blue-600 pb-1' 
-                  : 'text-gray-500 hover:text-gray-900'
-              }`}
-            >
-              Discover
-            </button>
-            <button
-              onClick={() => onNavigate('investor-dashboard')}
-              className={`text-sm font-medium transition-colors ${
-                currentPage === 'investor-dashboard' 
-                  ? 'text-blue-600 border-b-2 border-blue-600 pb-1' 
-                  : 'text-gray-500 hover:text-gray-900'
-              }`}
-            >
-              Portfolio
-            </button>
-            <button
-              onClick={() => onNavigate('creator-dashboard')}
-              className={`text-sm font-medium transition-colors ${
-                currentPage === 'creator-dashboard' 
-                  ? 'text-blue-600 border-b-2 border-blue-600 pb-1' 
-                  : 'text-gray-500 hover:text-gray-900'
-              }`}
-            >
-              My Projects
-            </button>
-          </nav>
+          {user && (
+            <nav className="hidden md:flex space-x-8">
+              {getNavigationItems().map((item) => {
+                const Icon = item.icon;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => onNavigate(item.id)}
+                    className={`text-sm font-medium transition-colors flex items-center ${
+                      currentPage === item.id 
+                        ? 'text-blue-600 border-b-2 border-blue-600 pb-1' 
+                        : 'text-gray-500 hover:text-gray-900'
+                    }`}
+                  >
+                    <Icon className="h-4 w-4 mr-1" />
+                    {item.label}
+                  </button>
+                );
+              })}
+            </nav>
+          )}
 
           <div className="flex items-center space-x-4">
-            <button
-              onClick={() => onNavigate('create-project')}
-              className="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Create Project
-            </button>
-            
-            <div className="hidden md:flex items-center text-gray-400 text-sm">
-              <MessageCircle className="h-4 w-4 mr-1" />
-              <span>AI Assistant available</span>
-            </div>
+            {user && (
+              <div className="flex items-center space-x-2">
+                <div className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${getRoleColor(user.role)}`}>
+                  {React.createElement(getRoleIcon(user.role), { className: "h-3 w-3 mr-1" })}
+                  {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
+                </div>
+              </div>
+            )}
             
             {isConnected ? (
               <div className="flex items-center space-x-2 px-3 py-2 bg-green-50 text-green-700 rounded-lg">
@@ -94,12 +123,6 @@ export const Header: React.FC<HeaderProps> = ({ currentPage, onNavigate }) => {
                 <Wallet className="h-4 w-4 mr-2" />
                 {isConnecting ? 'Connecting...' : 'Connect Wallet'}
               </button>
-            )}
-            
-            {error && (
-              <div className="text-xs text-red-600 mt-1">
-                {error}
-              </div>
             )}
           </div>
         </div>
