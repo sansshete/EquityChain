@@ -58,6 +58,11 @@ app.get('/health', (req, res) => {
   });
 });
 
+// Root route for browser check
+app.get('/', (req, res) => {
+  res.send('✅ EquityChain Backend is running');
+});
+
 // API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
@@ -78,7 +83,8 @@ app.use('*', (req, res) => {
 // Global error handler
 app.use(errorHandler);
 
-const PORT = config.port || 3001;
+// ✅ Port set to 3000 for WebContainer compatibility
+const PORT = config.port || 3000;
 
 app.listen(PORT, () => {
   logger.info(`EquityChain Backend Server running on port ${PORT}`);
