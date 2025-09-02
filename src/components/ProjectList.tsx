@@ -2,21 +2,21 @@ import React from 'react';
 import { Clock, Users, TrendingUp, ExternalLink } from 'lucide-react';
 import { useWeb3 } from '../hooks/useWeb3';
 import { ContractService } from '../services/contractService';
+import { mockProjects } from '../data/mockData';
 
 interface ProjectListProps {
   onProjectClick: (projectId: string) => void;
 }
 
 export const ProjectList: React.FC<ProjectListProps> = ({ onProjectClick }) => {
-  const { provider, chainId } = useWeb3();
+  const { provider, chainId, isConnected } = useWeb3();
   const [projects, setProjects] = React.useState<any[]>([]);
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
     const fetchProjects = async () => {
-      if (!provider || !chainId) {
-        // Fallback to mock data if no provider
-        const { mockProjects } = await import('../data/mockData');
+      if (!provider || !chainId || !isConnected) {
+        // Use mock data when not connected
         setProjects(mockProjects);
         setLoading(false);
         return;
@@ -26,17 +26,17 @@ export const ProjectList: React.FC<ProjectListProps> = ({ onProjectClick }) => {
         const contractService = new ContractService(provider, await provider.getSigner(), chainId);
         const result = await contractService.getApprovedProjects();
         
-        if (result.success) {
+        if (result.success && result.projects) {
           setProjects(result.projects);
         } else {
-          // Fallback to mock data on error
-          const { mockProjects } = await import('../data/mockData');
+          // Fallback to mock data
           setProjects(mockProjects);
         }
+      } catch (contractError) {
+        console.log('Contract not deployed or accessible, using mock data');
+        setProjects(mockProjects);
       } catch (error) {
         console.error('Error fetching projects:', error);
-        // Fallback to mock data on error
-        const { mockProjects } = await import('../data/mockData');
         setProjects(mockProjects);
       } finally {
         setLoading(false);
@@ -44,7 +44,7 @@ export const ProjectList: React.FC<ProjectListProps> = ({ onProjectClick }) => {
     };
 
     fetchProjects();
-  }, [provider, chainId]);
+  }, [provider, chainId, isConnected]);
 
   if (loading) {
     return (
@@ -72,7 +72,7 @@ export const ProjectList: React.FC<ProjectListProps> = ({ onProjectClick }) => {
             <div
               key={project.id}
               className="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg transition-all duration-300 cursor-pointer group"
-              onClick={() => onProjectClick(project.address || project.id)}
+              onClick={() => onProjectClick(project.id)}
             >
               <div className="relative">
                 <img

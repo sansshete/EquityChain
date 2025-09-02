@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Users, Clock, TrendingUp, Shield, Calendar, FileText, DollarSign, MessageCircle } from 'lucide-react';
+import { ethers } from 'ethers';
 import { useWeb3 } from '../hooks/useWeb3';
 import { ContractService } from '../services/contractService';
+import { mockProjects } from '../data/mockData';
 
 interface ProjectDetailProps {
-  projectId: string; // This will be the contract address
+  projectId: string;
   onBack: () => void;
   isConnected: boolean;
 }
@@ -17,12 +19,16 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ projectId, onBack,
   const [showInvestmentModal, setShowInvestmentModal] = useState(false);
   const [isInvesting, setIsInvesting] = useState(false);
   const [investmentError, setInvestmentError] = useState<string | null>(null);
+  const [isMockProject, setIsMockProject] = useState(false);
   
   React.useEffect(() => {
     const fetchProjectDetails = async () => {
-      if (!provider || !chainId) {
-        // Fallback to mock data if no provider
-        const { mockProjects } = await import('../data/mockData');
+      // Check if projectId is a valid Ethereum address
+      const isValidAddress = ethers.isAddress(projectId);
+      setIsMockProject(!isValidAddress);
+      
+      if (!isValidAddress || !provider || !chainId || !isConnected) {
+        // Use mock data for invalid addresses or when not connected
         const mockProject = mockProjects.find(p => p.id === projectId);
         setProject(mockProject);
         setLoading(false);
@@ -31,29 +37,27 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ projectId, onBack,
 
       try {
         const contractService = new ContractService(provider, await provider.getSigner(), chainId);
-        const result = await contractService.getProjectDetails(projectId);
+        const result = await contractService.getProjectDetails(projectId); // projectId is now a valid address
         
         if (result.success) {
           setProject(result.project);
         } else {
-          // Fallback to mock data on error
-          const { mockProjects } = await import('../data/mockData');
           const mockProject = mockProjects.find(p => p.id === projectId);
           setProject(mockProject);
+          setIsMockProject(true);
         }
       } catch (error) {
         console.error('Error fetching project details:', error);
-        // Fallback to mock data on error
-        const { mockProjects } = await import('../data/mockData');
         const mockProject = mockProjects.find(p => p.id === projectId);
         setProject(mockProject);
+        setIsMockProject(true);
       } finally {
         setLoading(false);
       }
     };
 
     fetchProjectDetails();
-  }, [projectId, provider, chainId]);
+  }, [projectId, provider, chainId, isConnected]);
   
   if (loading) {
     return (
@@ -87,7 +91,12 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ projectId, onBack,
   const estimatedEquity = investmentAmount ? (parseFloat(investmentAmount) / project.fundingGoal) * project.equityOffered : 0;
 
   const handleInvest = () => {
-    if (!isConnected) {
+    if (isMockProject) {
+      alert('This is a demo project. Connect your wallet and deploy contracts to invest in real projects.');
+      return;
+    }
+    
+    if (!isConnected || !ethers.isAddress(projectId)) {
       alert('Please connect your wallet first');
       return;
     }
@@ -95,7 +104,12 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ projectId, onBack,
   };
 
   const confirmInvestment = () => {
-    if (!provider || !signer || !chainId) {
+    if (isMockProject) {
+      alert('Cannot invest in demo projects');
+      return;
+    }
+    
+    if (!provider || !signer || !chainId || !ethers.isAddress(projectId)) {
       setInvestmentError('Wallet not connected');
       return;
     }
@@ -110,8 +124,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ projectId, onBack,
     try {
       const contractService = new ContractService(provider!, signer!, chainId!);
       
-      // For demo purposes, we'll use the project ID as the contract address
-      // In a real app, you'd fetch the actual contract address from your backend
+      // projectId is now guaranteed to be a valid contract address
       const result = await contractService.investInProject(projectId, investmentAmount);
       
       if (result.success) {
@@ -313,10 +326,14 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ projectId, onBack,
 
             <button
               onClick={handleInvest}
-              disabled={!investmentAmount || parseFloat(investmentAmount) < project.minInvestment}
-              className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+              disabled={!investmentAmount || parseFloat(investmentAmount) < project.minInvestment || isMockProject}
+              className={`w-full py-3 px-4 rounded-lg font-semibold transition-colors ${
+                isMockProject 
+                  ? 'bg-gray-400 text-white cursor-not-allowed' 
+                  : 'bg-blue-600 text-white hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed'
+              }`}
             >
-              {isConnected ? 'Invest Now' : 'Connect Wallet to Invest'}
+              {isMockProject ? 'Demo Project' : isConnected ? 'Invest Now' : 'Connect Wallet to Invest'}
             </button>
             
             <div className="text-center mt-3">
