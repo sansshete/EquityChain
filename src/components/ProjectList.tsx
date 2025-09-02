@@ -32,11 +32,8 @@ export const ProjectList: React.FC<ProjectListProps> = ({ onProjectClick }) => {
           // Fallback to mock data
           setProjects(mockProjects);
         }
-      } catch (contractError) {
-        console.log('Contract not deployed or accessible, using mock data');
-        setProjects(mockProjects);
       } catch (error) {
-        console.error('Error fetching projects:', error);
+        console.log('Contract not deployed or accessible, using mock data');
         setProjects(mockProjects);
       } finally {
         setLoading(false);
