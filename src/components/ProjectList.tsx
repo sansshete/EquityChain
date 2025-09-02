@@ -1,12 +1,62 @@
 import React from 'react';
 import { Clock, Users, TrendingUp, ExternalLink } from 'lucide-react';
-import { mockProjects } from '../data/mockData';
+import { useWeb3 } from '../hooks/useWeb3';
+import { ContractService } from '../services/contractService';
 
 interface ProjectListProps {
   onProjectClick: (projectId: string) => void;
 }
 
 export const ProjectList: React.FC<ProjectListProps> = ({ onProjectClick }) => {
+  const { provider, chainId } = useWeb3();
+  const [projects, setProjects] = React.useState<any[]>([]);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    const fetchProjects = async () => {
+      if (!provider || !chainId) {
+        // Fallback to mock data if no provider
+        const { mockProjects } = await import('../data/mockData');
+        setProjects(mockProjects);
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const contractService = new ContractService(provider, await provider.getSigner(), chainId);
+        const result = await contractService.getApprovedProjects();
+        
+        if (result.success) {
+          setProjects(result.projects);
+        } else {
+          // Fallback to mock data on error
+          const { mockProjects } = await import('../data/mockData');
+          setProjects(mockProjects);
+        }
+      } catch (error) {
+        console.error('Error fetching projects:', error);
+        // Fallback to mock data on error
+        const { mockProjects } = await import('../data/mockData');
+        setProjects(mockProjects);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjects();
+  }, [provider, chainId]);
+
+  if (loading) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading projects...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <div className="text-center mb-12">
@@ -15,14 +65,14 @@ export const ProjectList: React.FC<ProjectListProps> = ({ onProjectClick }) => {
       </div>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {mockProjects.map((project) => {
+        {projects.map((project) => {
           const fundingPercentage = (project.currentFunding / project.fundingGoal) * 100;
           
           return (
             <div
               key={project.id}
               className="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg transition-all duration-300 cursor-pointer group"
-              onClick={() => onProjectClick(project.id)}
+              onClick={() => onProjectClick(project.address || project.id)}
             >
               <div className="relative">
                 <img

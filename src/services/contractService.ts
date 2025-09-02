@@ -181,6 +181,11 @@ export class ContractService {
 
   async investInProject(projectAddress: string, amount: string) {
     try {
+      // Validate that projectAddress is a valid Ethereum address
+      if (!ethers.isAddress(projectAddress)) {
+        throw new Error('Invalid contract address provided');
+      }
+
       const equityToken = new ethers.Contract(projectAddress, EQUITY_TOKEN_ABI, this.signer);
 
       const tx = await equityToken.invest({

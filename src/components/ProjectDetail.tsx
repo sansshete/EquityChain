@@ -2,25 +2,85 @@ import React, { useState } from 'react';
 import { ArrowLeft, Users, Clock, TrendingUp, Shield, Calendar, FileText, DollarSign, MessageCircle } from 'lucide-react';
 import { useWeb3 } from '../hooks/useWeb3';
 import { ContractService } from '../services/contractService';
-import { mockProjects } from '../data/mockData';
 
 interface ProjectDetailProps {
-  projectId: string;
+  projectId: string; // This will be the contract address
   onBack: () => void;
   isConnected: boolean;
 }
 
 export const ProjectDetail: React.FC<ProjectDetailProps> = ({ projectId, onBack, isConnected }) => {
   const { provider, signer, chainId, account } = useWeb3();
+  const [project, setProject] = React.useState<any>(null);
+  const [loading, setLoading] = React.useState(true);
   const [investmentAmount, setInvestmentAmount] = useState('');
   const [showInvestmentModal, setShowInvestmentModal] = useState(false);
   const [isInvesting, setIsInvesting] = useState(false);
   const [investmentError, setInvestmentError] = useState<string | null>(null);
   
-  const project = mockProjects.find(p => p.id === projectId);
+  React.useEffect(() => {
+    const fetchProjectDetails = async () => {
+      if (!provider || !chainId) {
+        // Fallback to mock data if no provider
+        const { mockProjects } = await import('../data/mockData');
+        const mockProject = mockProjects.find(p => p.id === projectId);
+        setProject(mockProject);
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const contractService = new ContractService(provider, await provider.getSigner(), chainId);
+        const result = await contractService.getProjectDetails(projectId);
+        
+        if (result.success) {
+          setProject(result.project);
+        } else {
+          // Fallback to mock data on error
+          const { mockProjects } = await import('../data/mockData');
+          const mockProject = mockProjects.find(p => p.id === projectId);
+          setProject(mockProject);
+        }
+      } catch (error) {
+        console.error('Error fetching project details:', error);
+        // Fallback to mock data on error
+        const { mockProjects } = await import('../data/mockData');
+        const mockProject = mockProjects.find(p => p.id === projectId);
+        setProject(mockProject);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjectDetails();
+  }, [projectId, provider, chainId]);
   
+  if (loading) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading project details...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (!project) {
-    return <div>Project not found</div>;
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <button
+          onClick={onBack}
+          className="inline-flex items-center text-gray-500 hover:text-gray-700 mb-6"
+        >
+          <ArrowLeft className="h-5 w-5 mr-2" />
+          Back to Projects
+        </button>
+        <div className="text-center">
+          <p className="text-gray-600">Project not found</p>
+        </div>
+      </div>
+    );
   }
 
   const fundingPercentage = (project.currentFunding / project.fundingGoal) * 100;
