@@ -121,6 +121,11 @@ export class ContractService {
 
   async getProjectDetails(projectAddress: string) {
     try {
+      // Validate contract address
+      if (!ethers.isAddress(projectAddress)) {
+        throw new Error('Invalid contract address provided');
+      }
+      
       const equityToken = new ethers.Contract(projectAddress, EQUITY_TOKEN_ABI, this.provider);
       const factoryAddress = getContractAddress(this.chainId, 'projectFactory');
       const factory = new ethers.Contract(factoryAddress, PROJECT_FACTORY_ABI, this.provider);
