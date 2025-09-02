@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Upload, FileText, DollarSign, Users, Calendar } from 'lucide-react';
+import { ArrowLeft, Upload, FileText, DollarSign, Users, Calendar, MessageCircle } from 'lucide-react';
 import { useWeb3 } from '../hooks/useWeb3';
 import { ContractService } from '../services/contractService';
 
